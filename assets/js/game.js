@@ -66,27 +66,36 @@ var enemyInfo = [
 console.log(Math.random);
 console.log(enemyInfo.name);
 
+var fightOrSkip = function() {
+    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+
+    if (promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer. Please try again.");
+        return fightOrSkip();
+    }
+
+    promptFight = promptFight.toLowerCase();
+
+    if (promptFight === "skip") {
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+        if (confirmSkip) {
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            playerInfo.money = playerInfo.money - 10;
+            shop();
+            return true;
+        }
+
+        return false;
+    }
+};
+
 var fight = function(enemy) {
     console.log(enemy.name);
     // Repeat and execute as long as the enemy robot is still alive
     while (playerInfo.health > 0 && enemy.health > 0) {
-        
-        // Place fight function code block here
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle?  Enter 'FIGHT' or 'SKIP' to choose.");
-
-        // If player chooses to skip
-        if (promptFight === "skip" || promptFight === "SKIP") {
-            // Confirm player wants to skip
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-    
-            // If yes (true), leave fight
-            if (confirmSkip) {
-                window.alert(playerInfo.name + " has decided to skip the fight. Goodbye!");
-                // Subtract money from playerMoney for skipping
-                playerInfo.money = playerInfo.money - 10;
-                console.log("playerMoney", playerInfo.money)
-                break;
-            }
+        if (fightOrSkip()) {
+            break;
         }
     
         // Subtract the value of `playerAttack` from the value of `enemyHealth` and use that result to update the value in the `enemyHealth` variable
